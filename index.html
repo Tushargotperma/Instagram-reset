@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Password Reset Web | RecxyPlugs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(145deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 32px;
+            padding: 30px 25px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f5af19, #f12711);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .brand {
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .brand span {
+            color: #f12711;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 16px;
+            font-size: 15px;
+            background: #f8f9fa;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #f12711;
+            background: white;
+        }
+
+        .send-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #f5af19, #f12711);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(241, 39, 17, 0.4);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .result-box {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .result-box.success {
+            display: block;
+            background: #e8f5e9;
+            border: 1px solid #4caf50;
+        }
+
+        .result-box.error {
+            display: block;
+            background: #ffebee;
+            border: 1px solid #f44336;
+        }
+
+        .result-box.info {
+            display: block;
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+        }
+
+        .result-email {
+            font-weight: bold;
+            font-size: 18px;
+            margin: 10px 0;
+            word-break: break-all;
+            background: rgba(0,0,0,0.05);
+            padding: 8px;
+            border-radius: 12px;
+        }
+
+        .footer-credit {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #aaa;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .footer-credit strong {
+            color: #f12711;
+        }
+
+        .loader {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.6s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .note {
+            font-size: 11px;
+            color: #999;
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 PASSWORD RESET WEB</h1>
+        <div class="brand">Powered by <span>RECXYPLUGS</span></div>
+        <div class="subtitle">FAST RESET LINK SENDER</div>
+
+        <div class="input-group">
+            <label>📧 Instagram Username or Email</label>
+            <input type="text" id="userInput" placeholder="e.g., username or email@example.com">
+        </div>
+
+        <button class="send-btn" id="sendBtn">🚀 SEND LINK NOW</button>
+
+        <div id="result" class="result-box"></div>
+        <div class="note">⚠️ Reset link will be sent to associated email address</div>
+        <div class="footer-credit">
+            Developed by <strong>@RecxyPlugs</strong> • IG Reset Tool
+        </div>
+    </div>
+
+    <script>
+        const sendBtn = document.getElementById('sendBtn');
+        const userInput = document.getElementById('userInput');
+        const resultDiv = document.getElementById('result');
+
+        function showSuccess(email) {
+            resultDiv.className = 'result-box success';
+            resultDiv.innerHTML = `
+                <div>✅</div>
+                <strong>Successfully Sent to</strong>
+                <div class="result-email">${escapeHtml(email)}</div>
+                <div>📩 Password reset link has been sent!</div>
+            `;
+        }
+
+        function showError(msg) {
+            resultDiv.className = 'result-box error';
+            resultDiv.innerHTML = `<div>❌</div><strong>${escapeHtml(msg)}</strong>`;
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        sendBtn.addEventListener('click', async () => {
+            const username = userInput.value.trim();
+            
+            if (!username) {
+                showError('Please enter a username or email address');
+                return;
+            }
+
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<span class="loader"></span> SENDING...';
+            resultDiv.className = 'result-box';
+            resultDiv.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/reset', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: username })
+                });
+                
+                const data = await response.json();
+
+                if (data.success && data.email) {
+                    showSuccess(data.email);
+                } else {
+                    showError(data.message || 'Failed to send reset link');
+                }
+            } catch (error) {
+                showError('Network error. Please try again.');
+            }
+
+            sendBtn.disabled = false;
+            sendBtn.innerHTML = '🚀 SEND LINK NOW';
+        });
+    </script>
+</body>
+</html>
